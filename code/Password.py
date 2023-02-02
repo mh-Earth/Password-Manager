@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import webbrowser
 
 class PasswordWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(568, 272)
+        MainWindow.resize(568, 284)
         font = QtGui.QFont()
         font.setPointSize(8)
         MainWindow.setFont(font)
@@ -23,7 +23,7 @@ class PasswordWindow(object):
         self.emailLabel.setFont(font)
         self.emailLabel.setObjectName("emailLabel")
         self.passwordLable = QtWidgets.QLabel(self.centralwidget)
-        self.passwordLable.setGeometry(QtCore.QRect(30, 150, 91, 31))
+        self.passwordLable.setGeometry(QtCore.QRect(30, 140, 91, 31))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.passwordLable.setFont(font)
@@ -34,42 +34,72 @@ class PasswordWindow(object):
         font.setPointSize(14)
         self.email.setFont(font)
         self.email.setObjectName("email")
-        self.copy = QtWidgets.QPushButton(self.centralwidget)
-        self.copy.setGeometry(QtCore.QRect(40, 200, 121, 41))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.copy.setFont(font)
-        self.copy.setObjectName("copy")
-        self.back = QtWidgets.QPushButton(self.centralwidget)
-        self.back.setGeometry(QtCore.QRect(390, 200, 121, 41))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.back.setFont(font)
-        self.back.setObjectName("back")
-        self.togglePassword = QtWidgets.QPushButton(self.centralwidget)
-        self.togglePassword.setGeometry(QtCore.QRect(220, 200, 121, 41))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.togglePassword.setFont(font)
-        self.togglePassword.setObjectName("togglePassword")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setEnabled(True)
-        self.lineEdit.setGeometry(QtCore.QRect(150, 150, 401, 31))
+        self.lineEdit.setGeometry(QtCore.QRect(150, 140, 401, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.lineEdit.setFont(font)
         self.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.lineEdit.setReadOnly(True)
         self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(30, 230, 521, 44))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.togglePassword = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.togglePassword.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.togglePassword.setFont(font)
+        self.togglePassword.setObjectName("togglePassword")
+        self.horizontalLayout.addWidget(self.togglePassword)
+        self.copy = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.copy.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.copy.setFont(font)
+        self.copy.setObjectName("copy")
+        self.horizontalLayout.addWidget(self.copy)
+        self.openIn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.openIn.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.openIn.setFont(font)
+        self.openIn.setObjectName("openIn")
+        self.horizontalLayout.addWidget(self.openIn)
+        self.back = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.back.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.back.setFont(font)
+        self.back.setObjectName("back")
+        self.horizontalLayout.addWidget(self.back)
+        self.UrlLabel_2 = QtWidgets.QLabel(self.centralwidget)
+        self.UrlLabel_2.setGeometry(QtCore.QRect(30, 181, 61, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.UrlLabel_2.setFont(font)
+        self.UrlLabel_2.setObjectName("UrlLabel_2")
+        self.Url = QtWidgets.QLabel(self.centralwidget)
+        self.Url.setGeometry(QtCore.QRect(150, 181, 381, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.Url.setFont(font)
+        self.Url.setObjectName("Url")
         MainWindow.setCentralWidget(self.centralwidget)
-
+        # Add manually
         self.passVisiable = False
         self.togglePassword.clicked.connect(self.togglePasswordVisi)
         self.copy.clicked.connect(self.copyPassword)
+        self.openIn.clicked.connect(self.openUrl)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+    
     def togglePasswordVisi(self):
         if self.passVisiable:
             self.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
@@ -82,7 +112,9 @@ class PasswordWindow(object):
     def copyPassword(self):
         self.copy.setText("Copied!")
         QtWidgets.QApplication.clipboard().setText(self.lineEdit.text())
-
+    
+    def openUrl(self):
+        webbrowser.open(url=f"https://{self.Url.text()}")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -91,9 +123,12 @@ class PasswordWindow(object):
         self.emailLabel.setText(_translate("MainWindow", "Email:"))
         self.passwordLable.setText(_translate("MainWindow", "Password"))
         self.email.setText(_translate("MainWindow", "Email:"))
-        self.copy.setText(_translate("MainWindow", "Copy"))
-        self.back.setText(_translate("MainWindow", "Back"))
         self.togglePassword.setText(_translate("MainWindow", "Show Password"))
+        self.copy.setText(_translate("MainWindow", "Copy"))
+        self.openIn.setText(_translate("MainWindow", "Open Url"))
+        self.back.setText(_translate("MainWindow", "Back"))
+        self.UrlLabel_2.setText(_translate("MainWindow", "URL:"))
+        self.Url.setText(_translate("MainWindow", "www.google.com"))
 
 
 if __name__ == "__main__":

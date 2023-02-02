@@ -181,6 +181,7 @@ class Ui_MainWindow(object):
         # banding events to button
         self.authWindowUi.Createlabel_3.clicked.connect(self.OpenCatagory)
         self.authWindowUi.Exitlabel_3.clicked.connect(self.authWindow.close)
+        self.authWindowUi.passwordLineEdit.returnPressed.connect(self.OpenCatagory)
         self.authWindowUi.MasterPasswordlabel.setText(
             f"Password for {self.catagoryList.item(self.catagoryList.currentRow()).text()}")
 
@@ -303,9 +304,11 @@ class Ui_MainWindow(object):
         id = self.passwordList.currentItem().text(0)
         password = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['password']
         email = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['email']
+        url = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['url']
         self.passwordWindowUi.Catagory.setText(f"Catagory:{self.openCatagory}")
         self.passwordWindowUi.lineEdit.setText(password)
         self.passwordWindowUi.email.setText(email)
+        self.passwordWindowUi.Url.setText(url)
 
         self.passwordWindowUi.back.clicked.connect(self.passwordWindow.close)
 
@@ -328,9 +331,9 @@ class Ui_MainWindow(object):
                 self.passwordList.topLevelItem(index).setText(
                     0, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['id']))
                 self.passwordList.topLevelItem(index).setText(
-                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
+                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
+                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
                     index).setText(3, "**************")
                 self.passwordList.topLevelItem(index).setText(
@@ -353,9 +356,9 @@ class Ui_MainWindow(object):
                 self.passwordList.topLevelItem(index).setText(
                     0, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['id']))
                 self.passwordList.topLevelItem(index).setText(
-                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
+                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
+                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
                     index).setText(3, "**************")
                 self.passwordList.topLevelItem(index).setText(
