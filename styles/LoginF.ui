@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>316</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="spacing">
+       <number>30</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="Loginlabel_3">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+          <weight>50</weight>
+          <italic>true</italic>
+          <bold>false</bold>
+          <underline>false</underline>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#funcWidget QLineEdite{
+	border:1px solid #e5ebfo;
+	border-raduis: 5px;
+	padding: 5px 10px;
+	font-size: 16px;
+}
+
+#funcWidget QLineEdit:focuse{
+	border-color:#5500ff;
+}</string>
+        </property>
+        <property name="text">
+         <string>Login</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="MasterPasswordlabel">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Master Password</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_4">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="ShowPasswordButton">
+        <property name="styleSheet">
+         <string notr="true">image: url(:/icon/Icons/visible-16.ico);</string>
+        </property>
+        <property name="text">
+         <string>Show Password</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>D:/Important stuff/QT_Designer/Icons/visible-16.ico</normaloff>D:/Important stuff/QT_Designer/Icons/visible-16.ico</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="spacing">
+         <number>20</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="Exitlabel_3">
+          <property name="text">
+           <string>Exit</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icon/Icons/x-mark-16.ico</normaloff>:/icon/Icons/x-mark-16.ico</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Createlabel_3">
+          <property name="text">
+           <string>Create</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icon/Icons/plus-16.ico</normaloff>:/icon/Icons/plus-16.ico</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>320</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
