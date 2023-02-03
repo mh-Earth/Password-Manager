@@ -218,18 +218,22 @@ class Ui_MainWindow(object):
 
     def delete(self):
         if self.openCatagory != None:
-            # self.dialogBox.Warnings(title="Delete Catagory",message=f"Delete {self.openCatagory}?")
-            # self.dialogBox.confirmation()
-            
-            self.catagoryList.takeItem(self.catagoryList.currentRow())
-            del self.data[self.CATAGORY_CONTAINER][self.openCatagory]
-            self.data[self.CATAGORYLIST_CONTAINER].remove(self.openCatagory)
-            self.encrypt.storeData(self.data, self.FILE_PATH)
-            # updating the catagory list
-            self.catagoryList.clear()
-            self.loadCatagories()
-            # clearing the passwords
-            self.passwordList.clear()
+            self.catagoryList.setCurrentItem(self.catagoryList.item(self.data[self.CATAGORYLIST_CONTAINER].index(self.openCatagory)))
+            if self.openCatagory == self.catagoryList.item(self.catagoryList.currentRow()).text():
+                # self.dialogBox.Warnings(title="Delete Catagory",message=f"Delete {self.openCatagory}?")
+                # self.dialogBox.confirmation()
+                
+                self.catagoryList.takeItem(self.catagoryList.currentRow())
+                del self.data[self.CATAGORY_CONTAINER][self.openCatagory]
+                self.data[self.CATAGORYLIST_CONTAINER].remove(self.openCatagory)
+                self.encrypt.storeData(self.data, self.FILE_PATH)
+                # updating the catagory list
+                self.catagoryList.clear()
+                self.loadCatagories()
+                # clearing the passwords
+                self.passwordList.clear()
+                self.openCatagory = None
+                self.catagoryLabel.setText(f"Catagory")
         
         else:
             self.dialogBox.Critical(title="No catagory selected",message="Please open a catagory first or create a catagory")
@@ -319,12 +323,12 @@ class Ui_MainWindow(object):
         catagoryName = self.catagoryList.item(
             self.catagoryList.currentRow()).text()
         
-        # Updating the Catagory label
-        self.catagoryLabel.setText(f"Catagory:{catagoryName}")
-
-        self.passwordList.clear()
 
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
+            # Updating the Catagory label
+            self.catagoryLabel.setText(f"Catagory:{catagoryName}")
+            # clear opened password list
+            self.passwordList.clear()
             self.openCatagory = catagoryName
             for index, data in enumerate(self.data[self.CATAGORY_CONTAINER][catagoryName]):
                 item_0 = QtWidgets.QTreeWidgetItem(self.passwordList)
@@ -338,13 +342,13 @@ class Ui_MainWindow(object):
                     index).setText(3, "**************")
                 self.passwordList.topLevelItem(index).setText(
                     4, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['url']))
-                self.authWindow.close() 
+            # close the auth window
+            self.authWindow.close() 
 
         else:
             self.dialogBox.Critical(title='Wrong Password',message="Worng Password!!")
 
 
-        # close the auth window
 
     def OpenCatagoryByName(self, catagoryName):
         self.passwordList.clear()
@@ -367,6 +371,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Password Manager"))
+        # MainWindow.setWindowTitle(_translate("MainWindow", "Password Manager - Made by mhEarth on fiverr for osama988"))
         self.catagoryLabel.setText(_translate("MainWindow", "Categories"))
         __sortingEnabled = self.catagoryList.isSortingEnabled()
         self.catagoryList.setSortingEnabled(False)
