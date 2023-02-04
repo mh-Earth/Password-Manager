@@ -114,7 +114,12 @@ class PasswordWindow(object):
         QtWidgets.QApplication.clipboard().setText(self.lineEdit.text())
     
     def openUrl(self):
-        webbrowser.open(url=f"https://{self.Url.text()}")
+        if self.Url.text().startswith("https://") or self.Url.text().startswith("http://"):
+
+            webbrowser.open(url=self.Url.text())
+        else:
+            webbrowser.open(url=f"http://{self.Url.text()}")
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
