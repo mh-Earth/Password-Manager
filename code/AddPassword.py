@@ -124,19 +124,12 @@ class AddPasswordWindow(object):
         #  Add manually
         # binding button events 
         self.GenerateButton.clicked.connect(self.genPassword)
-        self.checkBox.clicked.connect(self.tooglePassword)
+        self.checkBox.clicked.connect(self.togglePassword)
         # Global Status
         self.isLoggedIn = True
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    # Buttons -> Add
-    # TODO
-    # def creatPassword(self):
-    #     if self.isLoggedIn:
-    #         # action for storeing the password
-    #         # print(self.TaglineEdit.text())
 
         
     # Buttons -> exit
@@ -147,7 +140,7 @@ class AddPasswordWindow(object):
     def genPassword(self):
         import string,random
 
-        apl = string.ascii_letters + string.digits
+        apl = string.ascii_letters + string.digits + string.digits
         aplList = []
         aplList.extend(apl)
         random.shuffle(aplList)
@@ -157,26 +150,11 @@ class AddPasswordWindow(object):
 
 
     # checkBox -> showpassword
-    def tooglePassword(self):
+    def togglePassword(self):
         if self.checkBox.isChecked():
             self.PasswordlineEdit_3.setEchoMode(QtWidgets.QLineEdit.Normal)
         else:
             self.PasswordlineEdit_3.setEchoMode(QtWidgets.QLineEdit.Password)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     def retranslateUi(self, MainWindow):

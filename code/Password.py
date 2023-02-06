@@ -103,9 +103,11 @@ class PasswordWindow(object):
     def togglePasswordVisi(self):
         if self.passVisiable:
             self.lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+            self.togglePassword.setText('Show Password')
             self.passVisiable = False
         else:
             self.lineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+            self.togglePassword.setText('Hide Password')
             self.passVisiable = True
 
 
@@ -114,7 +116,7 @@ class PasswordWindow(object):
         QtWidgets.QApplication.clipboard().setText(self.lineEdit.text())
     
     def openUrl(self):
-        if self.Url.text().startswith("https://") or self.Url.text().startswith("http://"):
+        if self.Url.text().startswith(("https://","http://")):
 
             webbrowser.open(url=self.Url.text())
         else:
@@ -133,7 +135,7 @@ class PasswordWindow(object):
         self.openIn.setText(_translate("MainWindow", "Open Url"))
         self.back.setText(_translate("MainWindow", "Back"))
         self.UrlLabel_2.setText(_translate("MainWindow", "URL:"))
-        self.Url.setText(_translate("MainWindow", "www.google.com"))
+        self.Url.setText(_translate("MainWindow", "https://www.google.com"))
 
 
 if __name__ == "__main__":

@@ -20,15 +20,6 @@ class AuthWindow(object):
         font.setUnderline(False)
         font.setWeight(50)
         self.Loginlabel_3.setFont(font)
-        self.Loginlabel_3.setStyleSheet("#funcWidget QLineEdite{\n"
-"    border-raduis: 5px;\n"
-"    padding: 5px 10px;\n"
-"    font-size: 16px;\n"
-"}\n"
-"\n"
-"#funcWidget QLineEdit:focuse{\n"
-"    border-color:#5500ff;\n"
-"}")
         self.Loginlabel_3.setAlignment(QtCore.Qt.AlignCenter)
         self.Loginlabel_3.setObjectName("Loginlabel_3")
         self.verticalLayout_4.addWidget(self.Loginlabel_3)
@@ -37,7 +28,7 @@ class AuthWindow(object):
         font.setPointSize(16)
         self.MasterPasswordlabel.setFont(font)
         self.MasterPasswordlabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.MasterPasswordlabel.setObjectName("MasterPasswordlabel")
+        self.MasterPasswordlabel.setObjectName("MasterPasswordLabel")
         self.verticalLayout_4.addWidget(self.MasterPasswordlabel)
         self.passwordLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.passwordLineEdit.setMinimumSize(QtCore.QSize(300, 35))
@@ -103,23 +94,13 @@ class AuthWindow(object):
             self.ShowPasswordButton.setText("Show Password")
             self.passwordVisibility = True
     
-    # TODO
-    # Buttons -> login
-    def login(self):
-        print("Login")
-        pass
-
-    # Buttons -> exit
-    def exit(self):
-        QtWidgets.qApp.quit()
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Catagory Login"))
         self.Loginlabel_3.setText(_translate("MainWindow", "Login"))
         self.MasterPasswordlabel.setText(_translate("MainWindow", "Master Password"))
         self.ShowPasswordButton.setText(_translate("MainWindow", "Show Password"))
-        self.Exitlabel_3.setText(_translate("MainWindow", "Exit"))
+        self.Exitlabel_3.setText(_translate("MainWindow", "Cancel"))
         self.Createlabel_3.setText(_translate("MainWindow", "Login"))
 
 

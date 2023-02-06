@@ -7,15 +7,17 @@ from Encryption import Encryption
 from Dialog import DialogBox
 import sys
 
-class Ui_MainWindow(object):
+class MainWindow(object):
     def __init__(self) -> None:
         super().__init__()
         self.dialogBox = DialogBox()
         # pickle system
         self.FILE_PATH = "data.pkl"
-        self.CATAGORY_CONTAINER = 'catagories'
+        self.CATEGORY_CONTAINER = 'catagories'
         self.CATEGORYPASSWORD_CONTAINER = 'catagorypasswords'
         self.CATAGORYLIST_CONTAINER = "catagoryList"
+        self.CATEGORY_ITEMHEADER = 'Catagory'
+        self.INDEX_ITEMHEADER = 'No'
         self.encrypt = Encryption()
         self.data = self.encrypt.loadObjFromFile(self.FILE_PATH)
 
@@ -65,8 +67,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.search.setFont(font)
-        self.search.setInputMask("")
-        self.search.setText("")
         self.search.setObjectName("search")
         self.gridLayout.addWidget(self.search, 0, 1, 1, 2)
         self.addCatagoryButton = QtWidgets.QPushButton(self.centralwidget)
@@ -153,8 +153,9 @@ class Ui_MainWindow(object):
 
         # banding events to button
         self.crateCatagoryWindowUi.create.clicked.connect(self.addCatagory)
-        self.crateCatagoryWindowUi.cancel.clicked.connect(
-            self.crateCatagoryWindow.close)
+        self.crateCatagoryWindowUi.cancel.clicked.connect(self.crateCatagoryWindow.close)
+        self.crateCatagoryWindowUi.NamelineEdit.returnPressed.connect(self.addCatagory) # Enter key 
+        self.crateCatagoryWindowUi.PasslineEdit.returnPressed.connect(self.addCatagory) # Enter key
 
         self.crateCatagoryWindow.show()
 
@@ -192,10 +193,9 @@ class Ui_MainWindow(object):
         if self.crateCatagoryWindowUi.NamelineEdit.text() != "" and self.crateCatagoryWindowUi.PasslineEdit.text() != "":
             item = QtWidgets.QListWidgetItem()
             item.setText(self.crateCatagoryWindowUi.NamelineEdit.text())
-            # item = self.catagoryList.item(3)
             self.catagoryList.addItem(item)
 
-            self.data[self.CATAGORY_CONTAINER].update({
+            self.data[self.CATEGORY_CONTAINER].update({
 
                 f"{self.crateCatagoryWindowUi.NamelineEdit.text()}": {}
             }
@@ -220,11 +220,9 @@ class Ui_MainWindow(object):
         if self.openCatagory != None:
             self.catagoryList.setCurrentItem(self.catagoryList.item(self.data[self.CATAGORYLIST_CONTAINER].index(self.openCatagory)))
             if self.openCatagory == self.catagoryList.item(self.catagoryList.currentRow()).text():
-                # self.dialogBox.Warnings(title="Delete Catagory",message=f"Delete {self.openCatagory}?")
-                # self.dialogBox.confirmation()
                 
                 self.catagoryList.takeItem(self.catagoryList.currentRow())
-                del self.data[self.CATAGORY_CONTAINER][self.openCatagory]
+                del self.data[self.CATEGORY_CONTAINER][self.openCatagory]
                 self.data[self.CATAGORYLIST_CONTAINER].remove(self.openCatagory)
                 self.encrypt.storeData(self.data, self.FILE_PATH)
                 # updating the catagory list
@@ -248,9 +246,9 @@ class Ui_MainWindow(object):
         catagory = self.openCatagory
 
         if label != "" and email != "" and password != "" and url != "":
-            self.data[self.CATAGORY_CONTAINER][self.openCatagory].update({
-                f'{str(len(self.data[self.CATAGORY_CONTAINER][self.openCatagory]) +1)}': {
-                    "id": f'{len(self.data[self.CATAGORY_CONTAINER][self.openCatagory]) +1}',
+            self.data[self.CATEGORY_CONTAINER][self.openCatagory].update({
+                f'{str(len(self.data[self.CATEGORY_CONTAINER][self.openCatagory]) +1)}': {
+                    "id": f'{len(self.data[self.CATEGORY_CONTAINER][self.openCatagory]) +1}',
                     "email": email,
                     "tag": label,
                     "password": password,
@@ -274,37 +272,21 @@ class Ui_MainWindow(object):
     def Search(self):
         query = self.search.text()
         result = []
-        # check it the query is whitespace
+        # check it the query is whitespace or empty
         if query.isspace() or query == "":
             self.dialogBox.Critical(title="Empty query",message="Search cannot be empty")
             return
 
-        if self.openCatagory == None:
-            # Searching for the query in the catagory (url only)
-            for catagory in self.data[self.CATAGORYLIST_CONTAINER]:
-                for i in self.data[self.CATAGORY_CONTAINER][catagory]:
-                    for j in self.data[self.CATAGORY_CONTAINER][catagory][i]:
-                        if str(self.data[self.CATAGORY_CONTAINER][catagory][i]['url']).find(query) != -1:
-                            if self.data[self.CATAGORY_CONTAINER][catagory][i] not in result:
-                                result.append(self.data[self.CATAGORY_CONTAINER][catagory][i])
+        # Searching for the query in all catagory in all flied
+        for catagory in self.data[self.CATAGORYLIST_CONTAINER]:
+            for i in self.data[self.CATEGORY_CONTAINER][catagory]:
+                for j in self.data[self.CATEGORY_CONTAINER][catagory][i]:
+                    # if j == self.INDEX_ITEMHEADER or j == self.CATEGORY_ITEMHEADER:
+                    #     pass
+                    if str(self.data[self.CATEGORY_CONTAINER][catagory][i][j]).find(query) != -1:
+                        if self.data[self.CATEGORY_CONTAINER][catagory][i] not in result:
+                            result.append(self.data[self.CATEGORY_CONTAINER][catagory][i])
         
-        else:
-            # Searching for the query in the opened catagory only
-            for i in self.data[self.CATAGORY_CONTAINER][self.openCatagory]:
-                for j in self.data[self.CATAGORY_CONTAINER][self.openCatagory][i]:
-                    if str(self.data[self.CATAGORY_CONTAINER][self.openCatagory][i][j]).find(query) != -1:
-                        if self.data[self.CATAGORY_CONTAINER][self.openCatagory][i] not in result:
-                            result.append(self.data[self.CATAGORY_CONTAINER][self.openCatagory][i])
-            
-            # Searching for the query in the catagory (url only)
-            for catagory in self.data[self.CATAGORYLIST_CONTAINER]:
-                for i in self.data[self.CATAGORY_CONTAINER][catagory]:
-                    for j in self.data[self.CATAGORY_CONTAINER][catagory][i]:
-                        if str(self.data[self.CATAGORY_CONTAINER][catagory][i]['url']).find(query) != -1:
-                            if self.data[self.CATAGORY_CONTAINER][catagory][i] not in result:
-                                result.append(self.data[self.CATAGORY_CONTAINER][catagory][i])
-        
-            
         # display the result in password list
         self.passwordList.clear()
         if len(result) > 0:
@@ -332,15 +314,15 @@ class Ui_MainWindow(object):
 
         id = self.passwordList.currentItem().text(0)
         catagory = self.passwordList.currentItem().text(5)
-        print(catagory)
+
         if catagory == self.openCatagory:
 
             self.passwordWindow = QtWidgets.QMainWindow()
             self.passwordWindowUi = PasswordWindow()
             self.passwordWindowUi.setupUi(self.passwordWindow)
-            password = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['password']
-            email = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['email']
-            url = self.data[self.CATAGORY_CONTAINER][self.openCatagory][id]['url']
+            password = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['password']
+            email = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['email']
+            url = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['url']
             self.passwordWindowUi.Catagory.setText(f"Catagory:{self.openCatagory}")
             self.passwordWindowUi.lineEdit.setText(password)
             self.passwordWindowUi.email.setText(email)
@@ -352,13 +334,11 @@ class Ui_MainWindow(object):
 
         else:
             self.OpenAuthWindow()
-            # self.dialogBox.Critical(title="Invalid",message="Invalid Credential")
 
 
     # Opening category password
     def OpenCatagory(self):
-        catagoryName = self.catagoryList.item(
-            self.catagoryList.currentRow()).text()
+        catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
         
 
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
@@ -367,25 +347,25 @@ class Ui_MainWindow(object):
             # clear opened password list
             self.passwordList.clear()
             self.openCatagory = catagoryName
-            for index, data in enumerate(self.data[self.CATAGORY_CONTAINER][catagoryName]):
+            for index, data in enumerate(self.data[self.CATEGORY_CONTAINER][catagoryName]):
                 item_0 = QtWidgets.QTreeWidgetItem(self.passwordList)
                 self.passwordList.topLevelItem(index).setText(
-                    0, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['id']))
+                    0, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['id']))
                 self.passwordList.topLevelItem(index).setText(
-                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
+                    1, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
+                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
                     index).setText(3, "**************")
                 self.passwordList.topLevelItem(index).setText(
-                    4, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['url']))
+                    4, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
                 self.passwordList.topLevelItem(index).setText(
-                    5, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['catagory']))
+                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
             # close the auth window
             self.authWindow.close() 
 
         else:
-            self.dialogBox.Critical(title='Wrong Password',message="Worng Password!!")
+            self.dialogBox.Critical(title='Wrong Password',message="Wrong Password!!")
 
 
 
@@ -394,20 +374,20 @@ class Ui_MainWindow(object):
 
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             self.openCatagory = catagoryName
-            for index, data in enumerate(self.data[self.CATAGORY_CONTAINER][catagoryName]):
+            for index, data in enumerate(self.data[self.CATEGORY_CONTAINER][catagoryName]):
                 item_0 = QtWidgets.QTreeWidgetItem(self.passwordList)
                 self.passwordList.topLevelItem(index).setText(
-                    0, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['id']))
+                    0, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['id']))
                 self.passwordList.topLevelItem(index).setText(
-                    1, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['tag']))
+                    1, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['email']))
+                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
                     index).setText(3, "**************")
                 self.passwordList.topLevelItem(index).setText(
-                    4, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['url']))
+                    4, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
                 self.passwordList.topLevelItem(index).setText(
-                    5, str(self.data[self.CATAGORY_CONTAINER][catagoryName][data]['catagory']))
+                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -422,12 +402,12 @@ class Ui_MainWindow(object):
         self.addCatagoryButton.setText(_translate("MainWindow", "Add"))
         self.deleteCatagory.setText(_translate("MainWindow", "Delete"))
         self.addPassword.setText(_translate("MainWindow", "Add"))
-        self.passwordList.headerItem().setText(0, _translate("MainWindow", "No"))
+        self.passwordList.headerItem().setText(0, _translate("MainWindow", self.INDEX_ITEMHEADER))
         self.passwordList.headerItem().setText(1, _translate("MainWindow", "Tag"))
         self.passwordList.headerItem().setText(2, _translate("MainWindow", "Email"))
         self.passwordList.headerItem().setText(3, _translate("MainWindow", "Password"))
         self.passwordList.headerItem().setText(4, _translate("MainWindow", "URL"))
-        self.passwordList.headerItem().setText(5, _translate("MainWindow", "Catagory"))
+        self.passwordList.headerItem().setText(5, _translate("MainWindow", self.CATEGORY_ITEMHEADER))
         __sortingEnabled = self.passwordList.isSortingEnabled()
         self.passwordList.setSortingEnabled(__sortingEnabled)
 
@@ -435,8 +415,8 @@ class Ui_MainWindow(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    Window = QtWidgets.QMainWindow()
+    ui = MainWindow()
+    ui.setupUi(Window)
+    Window.show()
     sys.exit(app.exec_())
