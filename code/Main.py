@@ -3,7 +3,7 @@ from crateCatagory import CreateCatagoryMainWindow
 from AddPassword import AddPasswordWindow
 from Login import AuthWindow
 from Password import PasswordWindow
-from Encryption import Encryption
+from Encryption import Encrypt
 from Dialog import DialogBox
 import sys
 
@@ -12,14 +12,14 @@ class MainWindow(object):
         super().__init__()
         self.dialogBox = DialogBox()
         # pickle system
-        self.FILE_PATH = "data.pkl"
+        self.FILE_PATH = "data.axx"
         self.CATEGORY_CONTAINER = 'catagories'
         self.CATEGORYPASSWORD_CONTAINER = 'catagorypasswords'
         self.CATAGORYLIST_CONTAINER = "catagoryList"
         self.CATEGORY_ITEMHEADER = 'Catagory'
         self.INDEX_ITEMHEADER = 'No'
-        self.encrypt = Encryption()
-        self.data = self.encrypt.loadObjFromFile(self.FILE_PATH)
+        self.encrypt = Encrypt()
+        self.data = self.encrypt.loadJsonData(self.FILE_PATH)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -209,7 +209,7 @@ class MainWindow(object):
                 self.crateCatagoryWindowUi.NamelineEdit.text())
 
             # updating the new dictionary
-            self.encrypt.storeData(self.data, self.FILE_PATH)
+            self.encrypt.StoreJsonData(self.FILE_PATH,self.data)
             # closing the CreateCatagoryWindow
             self.crateCatagoryWindow.close()
         
@@ -224,7 +224,7 @@ class MainWindow(object):
                 self.catagoryList.takeItem(self.catagoryList.currentRow())
                 del self.data[self.CATEGORY_CONTAINER][self.openCatagory]
                 self.data[self.CATAGORYLIST_CONTAINER].remove(self.openCatagory)
-                self.encrypt.storeData(self.data, self.FILE_PATH)
+                self.encrypt.StoreJsonData(self.FILE_PATH,self.data, )
                 # updating the catagory list
                 self.catagoryList.clear()
                 self.loadCatagories()
@@ -258,7 +258,7 @@ class MainWindow(object):
             })
 
             # updating the new dictionary
-            self.encrypt.storeData(self.data, self.FILE_PATH)
+            self.encrypt.StoreJsonData(self.FILE_PATH,self.data)
             # close the AddPasswordWindow
             self.addPasswordWindow.close()
         

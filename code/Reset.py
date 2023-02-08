@@ -1,18 +1,19 @@
-from Encryption import Encryption
+# from Encryption import Encryption
+from Encryption import Encrypt
 
 # Run this code for resetting the data file
 
-data={
-"catagoryList":[],
-"catagorypasswords":{
+data = {
+    "catagoryList": [],
+    "catagorypasswords": {
 
-},
-"catagories": {},
+    },
+    "catagories": {},
 
 }
 
 
-    
-a = Encryption()
-a.storeData(data,"data.pkl")
+a = Encrypt()
+# a.storeData(data,"data.pkl")
+a.StoreJsonData("data.axx", data=data)
 # data = a.loadObjFromFile("data.pkl")
