@@ -1,6 +1,7 @@
 /code/__pycache__/
 /code/text.py
 /code/.vscode
+.vscode/
 /code/build/
 /code/dist/
 *png

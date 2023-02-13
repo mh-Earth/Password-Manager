@@ -84,7 +84,9 @@ class Encrypt:
 
 
 if __name__ == "__main__":
-    a = Encrypt()
+    a = Encrypt(
+		
+	)
 
     # a.EncryptFile("test.json")
     # a.DecryptFile(FilePath="test.txt")
