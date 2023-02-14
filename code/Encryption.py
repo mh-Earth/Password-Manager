@@ -1,49 +1,21 @@
-import secrets
-from base64 import urlsafe_b64encode as b64e, urlsafe_b64decode as b64d
-import os
-from cryptography.fernet import Fernet, InvalidToken
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from EncryptCore import Encrypt
 import json
 
 
-class Encrypt:
-    _backend = default_backend()
-    _iterations = 100_000
-
-    def __init__(self) -> None:
-        # master_password: str
-        key = "3swH6SyUCTAZ0GRYqnOFuuRZ_ra8q2k8HHGC-GwV_Cc="
-        self.Fernet = Fernet(key, self._backend)
-
-        # password = bytes(master_password,encoding='utf8')
-        # salt = os.urandom(16)
-        # kdf = PBKDF2HMAC(
-        #     algorithm=hashes.SHA256(),
-        #     length=32,
-        #     salt=salt,
-        #     iterations=self._iterations,
-        #     )
-        # key = b64e(kdf.derive(password))
-        # token = f.encrypt(b"Secret message!")
-        # print(token)
-
-    def generate_key(self) -> bytes:
-        return self.Fernet.generate_key()
-
-    def Decrypt(self, token: bytes) -> bytes:
-        return self.Fernet.decrypt(token)
-
-    def Encrypt(self, token: bytes) -> bytes:
-        return self.Fernet.encrypt(token)
+class EncryptSystem():
+    def __init__(self, master_password: str) -> None:
+        """Initialize the Encrypt class."""
+        self.Encryption = Encrypt(master_password=master_password)
 
     # Encrypt a File
     def EncryptFile(self, FilePath: str) -> None:
 
+        # Read the file
         with open(FilePath, "rb") as f:
-            encryptData = self.Encrypt(f.read())
+            # Encrypt the read data
+            encryptData = self.Encryption.encrypt(f.read())
 
+        # Write the encrypted data in the file
         with open(FilePath, "wb") as f:
             f.write(encryptData)
 
@@ -53,9 +25,11 @@ class Encrypt:
         '''
 
         with open(FilePath, "rb") as f:
-            data = self.Decrypt(f.read())
+            # Read the encrypted file
+            data = self.Encryption.decrypt(f.read())
 
         with open(FilePath, "wb") as f:
+            # Write the decrypted data in the file
             f.write(data)
 
         return None
@@ -66,9 +40,12 @@ class Encrypt:
 
         with open(filePath, "rb") as f:
 
-            data = self.Decrypt(f.read())
+            # Read the encrypted file
+            data = self.Encryption.decrypt(f.read())
 
             try:
+                # Parse the json string to python dict
+                print(data)
                 jsonData = json.loads(data.decode("utf8").replace("'", '"'))
                 return jsonData
 
@@ -79,25 +56,7 @@ class Encrypt:
     def StoreJsonData(self, filePath: str, data: dict) -> None:
 
         with open(filePath, "wb") as f:
+            # Convert the python dict to json string
             data = bytes(str(data), encoding='utf8')
-            f.write(self.Encrypt(token=data))
-
-
-if __name__ == "__main__":
-    a = Encrypt(
-		
-	)
-
-    # a.EncryptFile("test.json")
-    # a.DecryptFile(FilePath="test.txt")
-    a.loadJsonData("test.json")
-    demoData = {
-        "catagoryList": [],
-        "catagorypasswords": {
-
-        },
-        "catagories": {}
-
-    }
-
-    # a.StoreJsonData("test.json",data=demoData)
+            # Encrypt the json string and write it in the file
+            f.write(self.Encryption.encrypt(token=data))

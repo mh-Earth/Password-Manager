@@ -1,5 +1,4 @@
-# from Encryption import Encryption
-from Encryption import Encrypt
+from Encryption import EncryptSystem
 
 # Run this code for resetting the data file
 
@@ -13,7 +12,5 @@ data = {
 }
 
 
-a = Encrypt()
-# a.storeData(data,"data.pkl")
+a = EncryptSystem(master_password="000")
 a.StoreJsonData("data.axx", data=data)
-# data = a.loadObjFromFile("data.pkl")

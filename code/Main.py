@@ -3,7 +3,7 @@ from crateCatagory import CreateCatagoryMainWindow
 from AddPassword import AddPasswordWindow
 from Login import AuthWindow
 from Password import PasswordWindow
-from Encryption import Encrypt
+from Encryption import EncryptSystem
 from Dialog import DialogBox
 import sys
 
@@ -18,7 +18,7 @@ class MainWindow(object):
         self.CATAGORYLIST_CONTAINER = "catagoryList"
         self.CATEGORY_ITEMHEADER = 'Catagory'
         self.INDEX_ITEMHEADER = 'No'
-        self.encrypt = Encrypt()
+        self.encrypt = EncryptSystem(master_password="000")
         self.data = self.encrypt.loadJsonData(self.FILE_PATH)
 
     def setupUi(self, MainWindow):
