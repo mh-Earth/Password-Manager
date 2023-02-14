@@ -238,7 +238,7 @@ class MainWindow(object):
             self.dialogBox.Information(title="Invalid",message="Invalid Credential")
 
     
-      def deleteSelectedPassword(self):
+    def deleteSelectedPassword(self):
         #we need to check if there is a catagory open
         if self.openCatagory != None:
             #we need to check if a password is selected
