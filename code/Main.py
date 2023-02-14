@@ -11,7 +11,6 @@ class MainWindow(object):
     def __init__(self) -> None:
         super().__init__()
         self.dialogBox = DialogBox()
-        # pickle system
         self.FILE_PATH = "data.axx"
         self.CATEGORY_CONTAINER = 'catagories'
         self.CATEGORYPASSWORD_CONTAINER = 'catagorypasswords'
@@ -23,106 +22,128 @@ class MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1044, 338)
+        MainWindow.resize(1118, 734)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.catagoryLabel = QtWidgets.QLabel(self.centralwidget)
-
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setItalic(False)
-        self.catagoryLabel.setFont(font)
-        self.catagoryLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.catagoryLabel.setObjectName("label")
-        self.verticalLayout.addWidget(self.catagoryLabel)
-        self.catagoryList = QtWidgets.QListWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.catagoryList.sizePolicy().hasHeightForWidth())
-        self.catagoryList.setSizePolicy(sizePolicy)
-        self.catagoryList.setObjectName("catagoryList")
-        self.verticalLayout.addWidget(self.catagoryList)
-        self.gridLayout.addLayout(self.verticalLayout, 2, 0, 1, 2)
-        self.searchPassword = QtWidgets.QPushButton(self.centralwidget)
-        font = QtGui.QFont()
-        font.setPointSize(13)
-        self.searchPassword.setFont(font)
-        self.searchPassword.setObjectName("searchPassword")
-        self.gridLayout.addWidget(self.searchPassword, 0, 0, 1, 1)
-        self.search = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.search.sizePolicy().hasHeightForWidth())
-        self.search.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.search.setFont(font)
-        self.search.setObjectName("search")
-        self.gridLayout.addWidget(self.search, 0, 1, 1, 2)
-        self.addCatagoryButton = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.addCatagoryButton.sizePolicy().hasHeightForWidth())
-        self.addCatagoryButton.setSizePolicy(sizePolicy)
-        self.addCatagoryButton.setMinimumSize(QtCore.QSize(200, 35))
-        self.addCatagoryButton.setMaximumSize(QtCore.QSize(200, 35))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.addCatagoryButton.setFont(font)
-        self.addCatagoryButton.setObjectName("addCatagory")
-        self.gridLayout.addWidget(self.addCatagoryButton, 3, 0, 1, 2)
         self.deleteCatagory = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.deleteCatagory.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(self.deleteCatagory.sizePolicy().hasHeightForWidth())
         self.deleteCatagory.setSizePolicy(sizePolicy)
-        self.deleteCatagory.setMinimumSize(QtCore.QSize(200, 35))
-        self.deleteCatagory.setMaximumSize(QtCore.QSize(200, 35))
+        self.deleteCatagory.setMaximumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
         self.deleteCatagory.setFont(font)
         self.deleteCatagory.setObjectName("deleteCatagory")
-        self.gridLayout.addWidget(self.deleteCatagory, 4, 0, 1, 2)
+        self.gridLayout.addWidget(self.deleteCatagory, 5, 0, 1, 2)
+        self.searchPassword = QtWidgets.QPushButton(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.searchPassword.setFont(font)
+        self.searchPassword.setObjectName("searchPassword")
+        self.gridLayout.addWidget(self.searchPassword, 0, 0, 1, 1)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.catagoryList = QtWidgets.QListWidget(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.catagoryList.sizePolicy().hasHeightForWidth())
+        self.catagoryList.setSizePolicy(sizePolicy)
+        self.catagoryList.setObjectName("catagoryList")
+        self.verticalLayout.addWidget(self.catagoryList)
+        self.gridLayout.addLayout(self.verticalLayout, 3, 0, 1, 2)
+        self.search = QtWidgets.QLineEdit(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.search.sizePolicy().hasHeightForWidth())
+        self.search.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.search.setFont(font)
+        self.search.setInputMask("")
+        self.search.setText("")
+        self.search.setObjectName("search")
+        self.gridLayout.addWidget(self.search, 0, 1, 1, 2)
+        self.addCatagoryButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.addCatagoryButton.sizePolicy().hasHeightForWidth())
+        self.addCatagoryButton.setSizePolicy(sizePolicy)
+        self.addCatagoryButton.setMaximumSize(QtCore.QSize(300, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.addCatagoryButton.setFont(font)
+        self.addCatagoryButton.setObjectName("addCatagoryButton")
+        self.gridLayout.addWidget(self.addCatagoryButton, 4, 0, 1, 2)
         self.addPassword = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.addPassword.sizePolicy().hasHeightForWidth())
+        self.addPassword.setSizePolicy(sizePolicy)
+        self.addPassword.setMaximumSize(QtCore.QSize(100, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.addPassword.setFont(font)
         self.addPassword.setObjectName("addPassword")
-        self.gridLayout.addWidget(self.addPassword, 0, 4, 1, 1)
+        self.gridLayout.addWidget(self.addPassword, 0, 3, 1, 1)
+        self.deletePassword = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.deletePassword.sizePolicy().hasHeightForWidth())
+        self.deletePassword.setSizePolicy(sizePolicy)
+        self.deletePassword.setMaximumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.deletePassword.setFont(font)
+        self.deletePassword.setObjectName("deletePassword")
+        self.gridLayout.addWidget(self.deletePassword, 2, 3, 1, 1)
         self.passwordList = QtWidgets.QTreeWidget(self.centralwidget)
         self.passwordList.setObjectName("passwordList")
-        self.gridLayout.addWidget(self.passwordList, 2, 2, 3, 1)
+        self.gridLayout.addWidget(self.passwordList, 2, 2, 4, 1)
+        self.catagoryLabel = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setItalic(False)
+        self.catagoryLabel.setFont(font)
+        self.catagoryLabel.setStyleSheet("background-color: rgb(173, 173, 173);")
+        self.catagoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.catagoryLabel.setObjectName("catagoryLabel")
+        self.gridLayout.addWidget(self.catagoryLabel, 2, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.actionSave = QtWidgets.QAction(MainWindow)
+        self.actionSave.setObjectName("actionSave")
+        self.actionOpen = QtWidgets.QAction(MainWindow)
+        self.actionOpen.setObjectName("actionOpen")
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # add manually
         self.addCatagoryButton.clicked.connect(self.OpenCrateCatagoryWindow)
-        self.deleteCatagory.clicked.connect(self.delete)
+        self.deleteCatagory.clicked.connect(self.deleteCategory)
         self.addPassword.clicked.connect(self.OpenAddPasswordWindow)
 
         # open selected password
         self.passwordList.itemDoubleClicked.connect(self.OpenPassword)
         self.passwordList.itemActivated.connect(
             self.OpenPassword)  # enter-key binding
+        # delete selected password
+        self.deletePassword.clicked.connect(self.deleteSelectedPassword)
         # open Catagory
         self.catagoryList.itemDoubleClicked.connect(self.OpenAuthWindow)
         self.catagoryList.itemActivated.connect(
@@ -216,7 +237,30 @@ class MainWindow(object):
         else:
             self.dialogBox.Information(title="Invalid",message="Invalid Credential")
 
-    def delete(self):
+    
+      def deleteSelectedPassword(self):
+        #we need to check if there is a catagory open
+        if self.openCatagory != None:
+            #we need to check if a password is selected
+            if self.passwordList.selectedItems() != []:
+                #we need to remove the password from the catagory
+                self.data[self.CATEGORY_CONTAINER][self.openCatagory].pop(self.passwordList.selectedItems()[0].text(0))
+                #we need to save the new data
+                self.encrypt.StoreJsonData(self.FILE_PATH,self.data)
+                #we need to clear the password list
+                self.passwordList.clear()
+                #we need to open the current catagory again
+                self.OpenCatagoryByName(self.openCatagory)
+
+            else:
+                #if no password was selected we need to show an error message
+                self.dialogBox.Information(title="No password",message="Please select a password first")
+        else:
+            #if no catagory was open we need to show an error message
+            self.dialogBox.Information(title="No catagory",message="Please open a catagory first or create a catagory")
+
+
+    def deleteCategory(self):
         if self.openCatagory != None:
             self.catagoryList.setCurrentItem(self.catagoryList.item(self.data[self.CATAGORYLIST_CONTAINER].index(self.openCatagory)))
             if self.openCatagory == self.catagoryList.item(self.catagoryList.currentRow()).text():
@@ -402,6 +446,8 @@ class MainWindow(object):
         self.addCatagoryButton.setText(_translate("MainWindow", "Add"))
         self.deleteCatagory.setText(_translate("MainWindow", "Delete"))
         self.addPassword.setText(_translate("MainWindow", "Add"))
+        self.deletePassword.setText(_translate("MainWindow", "Delete"))
+
         self.passwordList.headerItem().setText(0, _translate("MainWindow", self.INDEX_ITEMHEADER))
         self.passwordList.headerItem().setText(1, _translate("MainWindow", "Tag"))
         self.passwordList.headerItem().setText(2, _translate("MainWindow", "Email"))

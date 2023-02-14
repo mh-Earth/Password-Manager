@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class AddPasswordWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(618, 459)
+        # MainWindow.setFixedSize(618, 459)
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
