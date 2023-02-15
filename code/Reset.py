@@ -2,15 +2,16 @@ from Encryption import EncryptSystem
 
 # Run this code for resetting the data file
 
-data = {
-    "catagoryList": [],
-    "catagorypasswords": {
+if __name__ == "__main__":
+    data = {
+        "catagoryList": [],
+        "catagorypasswords": {
 
-    },
-    "catagories": {},
+        },
+        "catagories": {},
 
-}
+    }
+
+    EncryptSystem(master_password="000").StoreJsonData("data.axx", data=data)
 
 
-a = EncryptSystem(master_password="000")
-a.StoreJsonData("data.axx", data=data)

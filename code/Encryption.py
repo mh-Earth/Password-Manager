@@ -45,7 +45,6 @@ class EncryptSystem():
 
             try:
                 # Parse the json string to python dict
-                print(data)
                 jsonData = json.loads(data.decode("utf8").replace("'", '"'))
                 return jsonData
 

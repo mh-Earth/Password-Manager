@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from crateCatagory import CreateCatagoryMainWindow
-from AddPassword import AddPasswordWindow
+from AddAccount import AddAccountWindow
 from Login import AuthWindow
 from Password import PasswordWindow
 from Encryption import EncryptSystem
@@ -19,6 +19,7 @@ class MainWindow(object):
         self.INDEX_ITEMHEADER = 'No'
         self.encrypt = EncryptSystem(master_password="000")
         self.data = self.encrypt.loadJsonData(self.FILE_PATH)
+        self.searchArea = ["username", "email", "tag"]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -136,7 +137,7 @@ class MainWindow(object):
         # add manually
         self.addCatagoryButton.clicked.connect(self.OpenCrateCatagoryWindow)
         self.deleteCatagory.clicked.connect(self.deleteCategory)
-        self.addPassword.clicked.connect(self.OpenAddPasswordWindow)
+        self.addPassword.clicked.connect(self.OpenAddAccountWindow)
 
         # open selected password
         self.passwordList.itemDoubleClicked.connect(self.OpenPassword)
@@ -180,12 +181,12 @@ class MainWindow(object):
 
         self.crateCatagoryWindow.show()
 
-    def OpenAddPasswordWindow(self):
+    def OpenAddAccountWindow(self):
         if self.openCatagory == None:
             self.dialogBox.Information(title="No catagory",message="Please open a catagory first or create a catagory")
             return
         self.addPasswordWindow = QtWidgets.QMainWindow()
-        self.addPasswordWindowUi = AddPasswordWindow()
+        self.addPasswordWindowUi = AddAccountWindow()
         self.addPasswordWindowUi.setupUi(self.addPasswordWindow)
 
         # banding events to button
@@ -284,7 +285,8 @@ class MainWindow(object):
 
     def createPassword(self):
         label = self.addPasswordWindowUi.TaglineEdit.text()
-        email = self.addPasswordWindowUi.EmaillineEdit_2.text()
+        username = self.addPasswordWindowUi.UsernamelineEdit.text()
+        email = self.addPasswordWindowUi.EmaillineEdit.text()
         password = self.addPasswordWindowUi.PasswordlineEdit_3.text()
         url = self.addPasswordWindowUi.URLlineEdit.text()
         catagory = self.openCatagory
@@ -297,13 +299,14 @@ class MainWindow(object):
                     "tag": label,
                     "password": password,
                     "url": url,
+                    "username": username,
                     "catagory":catagory
                 }
             })
 
             # updating the new dictionary
             self.encrypt.StoreJsonData(self.FILE_PATH,self.data)
-            # close the AddPasswordWindow
+            # close the AddAccountWindow
             self.addPasswordWindow.close()
         
         else:
@@ -321,15 +324,15 @@ class MainWindow(object):
             self.dialogBox.Critical(title="Empty query",message="Search cannot be empty")
             return
 
-        # Searching for the query in all catagory in all flied
+        # Searching for the query in [tag,username,email]
         for catagory in self.data[self.CATAGORYLIST_CONTAINER]:
             for i in self.data[self.CATEGORY_CONTAINER][catagory]:
                 for j in self.data[self.CATEGORY_CONTAINER][catagory][i]:
-                    # if j == self.INDEX_ITEMHEADER or j == self.CATEGORY_ITEMHEADER:
-                    #     pass
-                    if str(self.data[self.CATEGORY_CONTAINER][catagory][i][j]).find(query) != -1:
-                        if self.data[self.CATEGORY_CONTAINER][catagory][i] not in result:
-                            result.append(self.data[self.CATEGORY_CONTAINER][catagory][i])
+                    # j is the item headers [id,tag,username,password,email,url]
+                    if j in self.searchArea:
+                        if str(self.data[self.CATEGORY_CONTAINER][catagory][i][j]).find(query) != -1:
+                            if self.data[self.CATEGORY_CONTAINER][catagory][i] not in result:
+                                result.append(self.data[self.CATEGORY_CONTAINER][catagory][i])
         
         # display the result in password list
         self.passwordList.clear()
@@ -342,13 +345,15 @@ class MainWindow(object):
                 self.passwordList.topLevelItem(index).setText(
                     1, str(data['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(data['email']))
+                    2, str(data['username']))
+                self.passwordList.topLevelItem(index).setText(
+                    3, str(data['email']))
                 self.passwordList.topLevelItem(
-                    index).setText(3, "**************")
+                    index).setText(4, "**************")
                 self.passwordList.topLevelItem(index).setText(
-                    4, str(data['url']))
+                    5, str(data['url']))
                 self.passwordList.topLevelItem(index).setText(
-                    5, str(data['catagory']))
+                    6, str(data['catagory']))
         else:
             self.dialogBox.Information(title="Nothing Found",message=f"No result found for '{query}'")
 
@@ -398,13 +403,15 @@ class MainWindow(object):
                 self.passwordList.topLevelItem(index).setText(
                     1, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
+                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['username']))
+                self.passwordList.topLevelItem(index).setText(
+                    3, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
-                    index).setText(3, "**************")
+                    index).setText(4, "**************")
                 self.passwordList.topLevelItem(index).setText(
-                    4, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
+                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
                 self.passwordList.topLevelItem(index).setText(
-                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
+                    6, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
             # close the auth window
             self.authWindow.close() 
 
@@ -425,13 +432,15 @@ class MainWindow(object):
                 self.passwordList.topLevelItem(index).setText(
                     1, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['tag']))
                 self.passwordList.topLevelItem(index).setText(
-                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
+                    2, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['username']))
+                self.passwordList.topLevelItem(index).setText(
+                    3, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['email']))
                 self.passwordList.topLevelItem(
-                    index).setText(3, "**************")
+                    index).setText(4, "**************")
                 self.passwordList.topLevelItem(index).setText(
-                    4, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
+                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
                 self.passwordList.topLevelItem(index).setText(
-                    5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
+                    6, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -450,10 +459,11 @@ class MainWindow(object):
 
         self.passwordList.headerItem().setText(0, _translate("MainWindow", self.INDEX_ITEMHEADER))
         self.passwordList.headerItem().setText(1, _translate("MainWindow", "Tag"))
-        self.passwordList.headerItem().setText(2, _translate("MainWindow", "Email"))
-        self.passwordList.headerItem().setText(3, _translate("MainWindow", "Password"))
-        self.passwordList.headerItem().setText(4, _translate("MainWindow", "URL"))
-        self.passwordList.headerItem().setText(5, _translate("MainWindow", self.CATEGORY_ITEMHEADER))
+        self.passwordList.headerItem().setText(2, _translate("MainWindow", "Username"))
+        self.passwordList.headerItem().setText(3, _translate("MainWindow", "Email"))
+        self.passwordList.headerItem().setText(4, _translate("MainWindow", "Password"))
+        self.passwordList.headerItem().setText(5, _translate("MainWindow", "URL"))
+        self.passwordList.headerItem().setText(6, _translate("MainWindow", self.CATEGORY_ITEMHEADER))
         __sortingEnabled = self.passwordList.isSortingEnabled()
         self.passwordList.setSortingEnabled(__sortingEnabled)
 
