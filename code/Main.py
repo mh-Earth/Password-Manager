@@ -214,7 +214,7 @@ class MainWindow(object):
         self.authWindowUi.setupUi(self.authWindow)
 
         # banding events to button
-        self.authWindowUi.Createlabel_3.clicked.connect(self.OpenCatagory)
+        self.authWindowUi.Createlabel_3.clicked.connect(lambda : self.OpenCatagoryByName(category))
         self.authWindowUi.Exitlabel_3.clicked.connect(self.authWindow.close)
         self.authWindowUi.passwordLineEdit.returnPressed.connect(lambda : self.OpenCatagoryByName(category))
         self.authWindowUi.MasterPasswordlabel.setText(
@@ -437,12 +437,12 @@ class MainWindow(object):
 
     # Opening category password
     def OpenCatagory(self):
-        if self.openCatagory == None:
-            catagoryName = self.passwordList.currentItem().text(6)
-        else:
-            catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
+        # getting the catagory name
+        catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
+        
+        print(catagoryName)
+            
 
- 
         #  checking if the password is correct
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             # Updating the Catagory label
@@ -479,6 +479,8 @@ class MainWindow(object):
         #  checking if the password is correct
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             self.openCatagory = catagoryName
+            self.catagoryLabel.setText(f"Catagory:{catagoryName}")
+            
             for index, data in enumerate(self.data[self.CATEGORY_CONTAINER][catagoryName]):
                 item_0 = QtWidgets.QTreeWidgetItem(self.passwordList)
                 self.passwordList.topLevelItem(index).setText(
@@ -495,6 +497,9 @@ class MainWindow(object):
                     5, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['url']))
                 self.passwordList.topLevelItem(index).setText(
                     6, str(self.data[self.CATEGORY_CONTAINER][catagoryName][data]['catagory']))
+            # close the auth window
+            self.authWindow.close()
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
