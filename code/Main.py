@@ -2,7 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from crateCatagory import CreateCatagoryMainWindow
 from AddAccount import AddAccountWindow
 from Login import AuthWindow
-from Password import PasswordWindow
 from Encryption import EncryptSystem
 from Dialog import DialogBox
 import sys
@@ -20,7 +19,6 @@ class MainWindow(object):
         self.INDEX_ITEMHEADER = 'No'
         self.encrypt = EncryptSystem(master_password="000")
         self.data = self.encrypt.loadJsonData(self.FILE_PATH)
-        print(self.data)
         self.searchArea = ["username", "email", "tag"]
 
     def setupUi(self, MainWindow):
@@ -39,8 +37,6 @@ class MainWindow(object):
         self.deleteCatagory.setMaximumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
         self.deleteCatagory.setFont(font)
         self.deleteCatagory.setObjectName("deleteCatagory")
         self.gridLayout.addWidget(self.deleteCatagory, 5, 0, 1, 2)
@@ -212,6 +208,21 @@ class MainWindow(object):
 
         self.authWindow.show()
     
+    def SwitchCategory(self,category:str):
+        self.authWindow = QtWidgets.QMainWindow()
+        self.authWindowUi = AuthWindow()
+        self.authWindowUi.setupUi(self.authWindow)
+
+        # banding events to button
+        self.authWindowUi.Createlabel_3.clicked.connect(self.OpenCatagory)
+        self.authWindowUi.Exitlabel_3.clicked.connect(self.authWindow.close)
+        self.authWindowUi.passwordLineEdit.returnPressed.connect(lambda : self.OpenCatagoryByName(category))
+        self.authWindowUi.MasterPasswordlabel.setText(
+            f"Password for {category}")
+
+        self.authWindow.show()
+
+
     # Function for open account Password Window
     def OpenAccountEditWindow(self):
         self.accountEditWindow = QtWidgets.QMainWindow()
@@ -330,7 +341,7 @@ class MainWindow(object):
         self.OpenCatagoryByName(self.openCatagory)
 
     def Search(self):
-        query = self.search.text()
+        query = self.search.text().lower()
         result = []
         # check it the query is whitespace or empty
         if query.isspace() or query == "":
@@ -343,7 +354,7 @@ class MainWindow(object):
                 for j in self.data[self.CATEGORY_CONTAINER][catagory][i]:
                     # j is the item headers [id,tag,username,password,email,url]
                     if j in self.searchArea:
-                        if str(self.data[self.CATEGORY_CONTAINER][catagory][i][j]).find(query) != -1:
+                        if str(self.data[self.CATEGORY_CONTAINER][catagory][i][j]).lower().find(query) != -1:
                             if self.data[self.CATEGORY_CONTAINER][catagory][i] not in result:
                                 result.append(self.data[self.CATEGORY_CONTAINER][catagory][i])
         
@@ -421,13 +432,15 @@ class MainWindow(object):
             self.accountEditWindow.show()
 
         else:
-            self.OpenCategoryAuthWindow()
+            self.SwitchCategory(catagory)
 
 
     # Opening category password
     def OpenCatagory(self):
-        
-        catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
+        if self.openCatagory == None:
+            catagoryName = self.passwordList.currentItem().text(6)
+        else:
+            catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
 
  
         #  checking if the password is correct
