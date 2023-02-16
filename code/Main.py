@@ -237,6 +237,13 @@ class MainWindow(object):
 
     def addCatagory(self):
         if self.crateCatagoryWindowUi.NamelineEdit.text() != "" and self.crateCatagoryWindowUi.PasslineEdit.text() != "":
+            # check for duplicate catagory names
+            if self.crateCatagoryWindowUi.NamelineEdit.text() in self.data[self.CATAGORYLIST_CONTAINER]:
+                self.dialogBox.Information(title="Duplicate",message="Catagory already exists")
+                return
+                
+                
+
             item = QtWidgets.QListWidgetItem()
             item.setText(self.crateCatagoryWindowUi.NamelineEdit.text())
             self.catagoryList.addItem(item)
@@ -288,6 +295,7 @@ class MainWindow(object):
     def deleteCategory(self):
         if self.openCatagory != None:
             self.catagoryList.setCurrentItem(self.catagoryList.item(self.data[self.CATAGORYLIST_CONTAINER].index(self.openCatagory)))
+
             if self.openCatagory == self.catagoryList.item(self.catagoryList.currentRow()).text():
                 
                 self.catagoryList.takeItem(self.catagoryList.currentRow())
@@ -440,9 +448,6 @@ class MainWindow(object):
         # getting the catagory name
         catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
         
-        print(catagoryName)
-            
-
         #  checking if the password is correct
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             # Updating the Catagory label
@@ -450,6 +455,7 @@ class MainWindow(object):
             # clear opened password list
             self.passwordList.clear()
             self.openCatagory = catagoryName
+
             for index, data in enumerate(self.data[self.CATEGORY_CONTAINER][catagoryName]):
                 item_0 = QtWidgets.QTreeWidgetItem(self.passwordList)
                 self.passwordList.topLevelItem(index).setText(
