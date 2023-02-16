@@ -1,3 +1,7 @@
+# The file is not used in the project, it is just for reference
+# Don't delete this file
+# Read only
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import webbrowser
 

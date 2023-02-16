@@ -6,6 +6,7 @@ from Password import PasswordWindow
 from Encryption import EncryptSystem
 from Dialog import DialogBox
 import sys
+from EditAccount import AccountEditWindow
 
 class MainWindow(object):
     def __init__(self) -> None:
@@ -19,6 +20,7 @@ class MainWindow(object):
         self.INDEX_ITEMHEADER = 'No'
         self.encrypt = EncryptSystem(master_password="000")
         self.data = self.encrypt.loadJsonData(self.FILE_PATH)
+        print(self.data)
         self.searchArea = ["username", "email", "tag"]
 
     def setupUi(self, MainWindow):
@@ -146,9 +148,9 @@ class MainWindow(object):
         # delete selected password
         self.deletePassword.clicked.connect(self.deleteSelectedPassword)
         # open Catagory
-        self.catagoryList.itemDoubleClicked.connect(self.OpenAuthWindow)
+        self.catagoryList.itemDoubleClicked.connect(self.OpenCategoryAuthWindow)
         self.catagoryList.itemActivated.connect(
-            self.OpenAuthWindow)  # enter-key binding
+            self.OpenCategoryAuthWindow)  # enter-key binding
         
         # search key
         self.search.returnPressed.connect(self.Search)
@@ -196,7 +198,7 @@ class MainWindow(object):
         # showing the window
         self.addPasswordWindow.show()
 
-    def OpenAuthWindow(self):
+    def OpenCategoryAuthWindow(self):
         self.authWindow = QtWidgets.QMainWindow()
         self.authWindowUi = AuthWindow()
         self.authWindowUi.setupUi(self.authWindow)
@@ -209,6 +211,17 @@ class MainWindow(object):
             f"Password for {self.catagoryList.item(self.catagoryList.currentRow()).text()}")
 
         self.authWindow.show()
+    
+    # Function for open account Password Window
+    def OpenAccountEditWindow(self):
+        self.accountEditWindow = QtWidgets.QMainWindow()
+        self.accountEditWindowUi = AccountEditWindow()
+        self.accountEditWindowUi.setupUi(self.accountEditWindow)
+
+        # banding events to button
+        self.accountEditWindowUi.SaveButton.clicked.connect(self.SaveAccount)
+        self.accountEditWindowUi.ExitButton.clicked.connect(self.accountEditWindow.close)
+        self.accountEditWindow.show()
 
 
     def addCatagory(self):
@@ -358,38 +371,66 @@ class MainWindow(object):
             self.dialogBox.Information(title="Nothing Found",message=f"No result found for '{query}'")
 
 
+    def SaveAccount(self, id, catagory):
+        label = self.accountEditWindowUi.tagLineEdit.text()
+        username = self.accountEditWindowUi.userNameLineEdit.text()
+        email = self.accountEditWindowUi.emailLineEdit.text()
+        password = self.accountEditWindowUi.passwordLintEdit.text()
+        url = self.accountEditWindowUi.URLlineEdit.text()
+
+        # changing the data
+        self.data[self.CATEGORY_CONTAINER][catagory][id]['tag'] = label
+        self.data[self.CATEGORY_CONTAINER][catagory][id]['username'] = username
+        self.data[self.CATEGORY_CONTAINER][catagory][id]['email'] = email
+        self.data[self.CATEGORY_CONTAINER][catagory][id]['password'] = password
+        self.data[self.CATEGORY_CONTAINER][catagory][id]['url'] = url
+        # store the data
+        self.encrypt.StoreJsonData(self.FILE_PATH,self.data)
+        # exit the window
+        self.accountEditWindow.close()
+
 
     def OpenPassword(self):
 
         id = self.passwordList.currentItem().text(0)
-        catagory = self.passwordList.currentItem().text(5)
+        catagory = self.passwordList.currentItem().text(6)
 
         if catagory == self.openCatagory:
 
-            self.passwordWindow = QtWidgets.QMainWindow()
-            self.passwordWindowUi = PasswordWindow()
-            self.passwordWindowUi.setupUi(self.passwordWindow)
             password = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['password']
             email = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['email']
             url = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['url']
-            self.passwordWindowUi.Catagory.setText(f"Catagory:{self.openCatagory}")
-            self.passwordWindowUi.lineEdit.setText(password)
-            self.passwordWindowUi.email.setText(email)
-            self.passwordWindowUi.Url.setText(url)
+            username = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['username']
+            tag = self.data[self.CATEGORY_CONTAINER][self.openCatagory][id]['tag']
 
-            self.passwordWindowUi.back.clicked.connect(self.passwordWindow.close)
 
-            self.passwordWindow.show()
+            self.accountEditWindow = QtWidgets.QMainWindow()
+            self.accountEditWindowUi = AccountEditWindow()
+            self.accountEditWindowUi.setupUi(self.accountEditWindow)
+            # setting the data
+            self.accountEditWindowUi.tagLineEdit.setText(tag)
+            self.accountEditWindowUi.userNameLineEdit.setText(username)
+            self.accountEditWindowUi.emailLineEdit.setText(email)
+            self.accountEditWindowUi.passwordLintEdit.setText(password)
+            self.accountEditWindowUi.URLlineEdit.setText(url)
+
+
+            # banding events to button
+            self.accountEditWindowUi.SaveButton.clicked.connect(lambda: self.SaveAccount(id,catagory))
+            self.accountEditWindowUi.ExitButton.clicked.connect(self.accountEditWindow.close)
+            self.accountEditWindow.show()
 
         else:
-            self.OpenAuthWindow()
+            self.OpenCategoryAuthWindow()
 
 
     # Opening category password
     def OpenCatagory(self):
-        catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
         
+        catagoryName = self.catagoryList.item(self.catagoryList.currentRow()).text()
 
+ 
+        #  checking if the password is correct
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             # Updating the Catagory label
             self.catagoryLabel.setText(f"Catagory:{catagoryName}")
@@ -422,7 +463,7 @@ class MainWindow(object):
 
     def OpenCatagoryByName(self, catagoryName):
         self.passwordList.clear()
-
+        #  checking if the password is correct
         if self.data[self.CATEGORYPASSWORD_CONTAINER][catagoryName] == self.authWindowUi.passwordLineEdit.text():
             self.openCatagory = catagoryName
             for index, data in enumerate(self.data[self.CATEGORY_CONTAINER][catagoryName]):
